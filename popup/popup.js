@@ -22,3 +22,8 @@ if (sendMessageId) {
         });
     };
 }
+
+document.onload = function() {
+    console.log("popup.js loaded");
+    console.log(chrome.tabs);
+}

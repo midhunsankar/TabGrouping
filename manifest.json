@@ -20,10 +20,12 @@
           "js": ["lib/jquery.min.js","content-scripts/content.js"]
       }
   ],
-  "web_accessible_resources": [
-      {
-          "resources": ["images/*.jpeg"],
-          "matches": ["<all_urls>"]
-      }
-  ]
+  "background": {
+      "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "permissions": ["activeTab", "tabs", "tabGroups"]
 }
