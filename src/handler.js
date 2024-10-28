@@ -1,9 +1,22 @@
+const readLocalStorage = async (key) => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get([key], function (result) {
+        if (result[key] === undefined) {
+          reject();
+        } else {
+          resolve(result[key]);
+        }
+      });
+    });
+  };
+
 const handler = {
-    tabAction: function (windowId, tab, attempt = 0) {
+    tabAction: async function (windowId, tab, attempt = 0) {
         if (attempt > 1000) {
             console.log("Too many attempts to group the tabs");
             return;
         }
+        const settings = await readLocalStorage('settings');
         var host = new URL(tab.url).host;
         chrome.tabs.query({ windowId: windowId }, function (tabs) {
             if (chrome.runtime.lastError) {
@@ -16,7 +29,7 @@ const handler = {
                 }
             }
             var filteredTabs = tabs.filter(t => new URL(t.url).host === host);
-            if (filteredTabs.length > 2) {
+            if (filteredTabs.length > settings.itemCount) {
                 var tabIds = filteredTabs.map(t => t.id);
                 //see if there is a group with the same host
                 chrome.tabGroups.query({ title: host }, function (groups) {
@@ -59,6 +72,15 @@ const handler = {
                 filteredTabs.forEach(t => {
                     chrome.tabs.ungroup(t.id);
                 });
+            }
+        });
+    },
+    updateSettings: function (settings) {
+        chrome.storage.local.set({ settings: settings }, function () {
+            if (chrome.runtime.lastError) {
+                console.error("Error saving settings:", chrome.runtime.lastError);
+            } else {
+                console.log("Settings saved successfully");
             }
         });
     }

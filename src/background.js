@@ -1,5 +1,5 @@
 
-import { handler } from './lib/handler.js';
+import { handler } from './handler.js';
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete') {
@@ -21,5 +21,15 @@ chrome.tabs.onAttached.addListener((tabId, attachInfo) => {
     var newWindowId = attachInfo.newWindowId;
     chrome.tabs.get(tabId, function (tab) {
         handler(newWindowId, tab);
+    });
+});
+
+chrome.runtime.onConnect.addListener(function(port) {
+    if (port.name !== "tabGroupingExtension") {
+        return;
+    }
+    port.onMessage.addListener(function(settings) {
+        console.log(settings);
+        handler.updateSettings(settings);
     });
 });
