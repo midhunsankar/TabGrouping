@@ -3,3 +3,5 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   port.postMessage(request);
   sendResponse({ fromcontent: "Settings updated." });
 });
+
+export {};

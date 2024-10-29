@@ -1,6 +1,6 @@
 const sendMessageId = document.getElementById("sendmessageid");
 // Function to get a cookie value by name
-function getCookie(name) {
+function getCookie(name:string) {
     let matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
@@ -8,12 +8,12 @@ function getCookie(name) {
 }
 
 // Set itemCount value from cookie if available
-var itemCount = document.getElementById("itemCount");
+var itemCount = document.getElementById("itemCount") as HTMLInputElement;
 var cookieItemCount = getCookie("itemCount");
 if (cookieItemCount) {
     itemCount.value = cookieItemCount;
 } else if (!itemCount.value) {
-    itemCount.value = 3;
+    itemCount.value = "3";
     document.cookie = "itemCount=" + itemCount.value + "; path=/";
 }
 
@@ -23,9 +23,13 @@ if (sendMessageId) {
         document.cookie = "itemCount=" + itemCount.value + "; path=/";
         const settings = { itemCount: itemCount.value };
         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, settings , function(response) {
-                console.log(response);
-            });
+            if (tabs[0].id !== undefined) {
+                chrome.tabs.sendMessage(tabs[0].id, settings, function(response) {
+                    console.log(response);
+                });
+            }
         });
     };
 }
+
+export {};
