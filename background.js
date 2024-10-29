@@ -23,3 +23,13 @@ chrome.tabs.onAttached.addListener((tabId, attachInfo) => {
         handler(newWindowId, tab);
     });
 });
+
+chrome.runtime.onConnect.addListener(function(port) {
+    if (port.name !== "tabGroupingExtension") {
+        return;
+    }
+    port.onMessage.addListener(function(settings) {
+        console.log(settings);
+        handler.extensionAction(settings);
+    });
+});
