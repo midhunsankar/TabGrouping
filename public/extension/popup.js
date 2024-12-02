@@ -1,6 +1,6 @@
 const sendMessageId = document.getElementById("sendmessageid");
 // Function to get a cookie value by name
-function getCookie(name:string) {
+function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
@@ -8,7 +8,7 @@ function getCookie(name:string) {
 }
 
 // Set itemCount value from cookie if available
-var itemCount = document.getElementById("itemCount") as HTMLInputElement;
+var itemCount = document.getElementById("itemCount");
 var cookieItemCount = getCookie("itemCount");
 if (cookieItemCount) {
     itemCount.value = cookieItemCount;
@@ -31,5 +31,3 @@ if (sendMessageId) {
         });
     };
 }
-
-export {};

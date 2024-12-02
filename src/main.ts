@@ -1,9 +1,5 @@
-import * as background from './background'
-import * as content from './content/content'
-import * as popup from './page/popup'
+import * as background from './background';
 
 function main() {
     let a = background;
-    let b = content;
-    let c = popup;
 }
